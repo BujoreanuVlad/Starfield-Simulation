@@ -1,6 +1,4 @@
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -37,26 +35,34 @@ public class Starfield extends Frame {
     @Override
     public void paint(Graphics g) {
 
+        Graphics tmp = g;
+        Image buffImage = createImage(width, height);
+        g = buffImage.getGraphics();
+
         g.setColor(Color.WHITE);
         for (int i = 0; i < numStars; i++) {
             stars[i].display(g);
             stars[i].update(velocity);
         }
+
+        tmp.drawImage(buffImage, 0, 0, null);
     }
 
     public static void main(String[] args) {
-        
-        Starfield starfield = new Starfield(50, 300);
+
+        long currentTime;
+
+        Starfield starfield = new Starfield(1, 400);
         starfield.setSize(width, height);
         starfield.setVisible(true);
 
+        currentTime = System.currentTimeMillis();
+
         while (true) {
-            starfield.repaint();
-            try {
-                Thread.sleep(100);
-            }
-            catch(Exception e) {
-                System.out.println(e);
+            
+            if (System.currentTimeMillis() - currentTime >= 10) {
+                starfield.repaint();
+                currentTime = System.currentTimeMillis();
             }
         }
     }
